@@ -7,14 +7,9 @@ type CursorMode = "dot" | "link" | "dish";
 const SIZES: Record<CursorMode, number> = {
   dot: 12,
   link: 40,
-  dish: 56,
+  dish: 44,
 };
 
-/**
- * Cursor custom: punto naranja que sigue al puntero con lerp y se
- * expande suavemente sobre enlaces y botones. Desactivado en touch;
- * con prefers-reduced-motion el seguimiento es directo, sin lerp.
- */
 export default function Cursor() {
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +28,10 @@ export default function Cursor() {
     const pill = root.querySelector<HTMLDivElement>("[data-pill]")!;
     const plus = root.querySelector<SVGElement>("[data-plus]")!;
 
+    // Estado inicial: punto ember relleno
+    pill.style.backgroundColor = "#ff6b00";
+    pill.style.boxShadow = "none";
+
     const pos = { x: -100, y: -100 };
     const target = { x: -100, y: -100 };
     let visible = false;
@@ -44,8 +43,20 @@ export default function Cursor() {
       mode = m;
       pill.style.width = `${SIZES[m]}px`;
       pill.style.height = `${SIZES[m]}px`;
-      pill.style.opacity = m === "dot" ? "1" : "0.85";
-      plus.style.opacity = m === "dish" ? "1" : "0";
+
+      if (m === "dish") {
+        // Círculo vacío con borde ember fino + «+» ember
+        pill.style.backgroundColor = "transparent";
+        pill.style.boxShadow = "inset 0 0 0 1px #ff6b00";
+        pill.style.opacity = "1";
+        plus.style.opacity = "1";
+      } else {
+        // Punto/bola ember rellena
+        pill.style.backgroundColor = "#ff6b00";
+        pill.style.boxShadow = "none";
+        pill.style.opacity = m === "link" ? "0.85" : "1";
+        plus.style.opacity = "0";
+      }
     };
 
     const onMove = (e: PointerEvent) => {
@@ -99,7 +110,7 @@ export default function Cursor() {
       <div className="relative -translate-x-1/2 -translate-y-1/2">
         <div
           data-pill
-          className="flex items-center justify-center h-3 w-3 rounded-full bg-ember transition-[width,height,opacity] duration-300 [transition-timing-function:var(--ease-brasa)]"
+          className="flex items-center justify-center h-3 w-3 rounded-full transition-[width,height,opacity,background-color,box-shadow] duration-300 [transition-timing-function:var(--ease-brasa)]"
         >
           <svg
             data-plus
@@ -107,7 +118,7 @@ export default function Cursor() {
             viewBox="0 0 16 16"
             className="h-[14px] w-[14px] shrink-0 opacity-0 transition-opacity duration-200"
             fill="none"
-            stroke="#0a0a0a"
+            stroke="#ff6b00"
             strokeWidth="1.5"
             strokeLinecap="round"
           >
