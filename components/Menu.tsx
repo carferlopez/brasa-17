@@ -82,7 +82,6 @@ export default function Menu({ media }: { media: string[] }) {
         {PASES.map((pase, i) => (
           <li key={pase.num} className="border-t border-bone/10 last:border-b">
             <div
-              data-cursor="reservar"
               role="link"
               tabIndex={0}
               onClick={() => scrollToAnchor("#reservas")}

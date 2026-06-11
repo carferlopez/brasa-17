@@ -99,7 +99,7 @@ export default function Hero({ media }: { media: string[] }) {
         <h1 className="font-bold leading-[0.85] tracking-[-0.03em] text-bone [font-size:17vw]">
           <span className="block overflow-hidden">
             <span className="hero-line block" style={{ animationDelay: "0.05s" }}>
-              BRASA
+              Brasa
             </span>
           </span>
           <span className="block overflow-hidden">
