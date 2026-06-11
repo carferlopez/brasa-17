@@ -116,6 +116,7 @@ export default function Menu({ media }: { media: string[] }) {
             <div
               role="button"
               tabIndex={0}
+              data-cursor="dish"
               onClick={() => openDetail(dish)}
               onKeyDown={(e) => e.key === "Enter" && openDetail(dish)}
               onPointerEnter={() => canHover && setActive(i)}
@@ -175,12 +176,6 @@ export default function Menu({ media }: { media: string[] }) {
               <MediaImage src={dish.image} alt="" media={media} sizes="288px" />
             </div>
           ))}
-          <PlusButton
-            onClick={() => {
-              const i = activeRef.current;
-              if (i !== null) openDetail(DISHES[i]);
-            }}
-          />
         </div>
       )}
 

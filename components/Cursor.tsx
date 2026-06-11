@@ -2,11 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
-type CursorMode = "dot" | "link";
+type CursorMode = "dot" | "link" | "dish";
 
 const SIZES: Record<CursorMode, number> = {
   dot: 12,
   link: 40,
+  dish: 56,
 };
 
 /**
@@ -30,6 +31,7 @@ export default function Cursor() {
     ).matches;
 
     const pill = root.querySelector<HTMLDivElement>("[data-pill]")!;
+    const plus = root.querySelector<SVGElement>("[data-plus]")!;
 
     const pos = { x: -100, y: -100 };
     const target = { x: -100, y: -100 };
@@ -42,7 +44,8 @@ export default function Cursor() {
       mode = m;
       pill.style.width = `${SIZES[m]}px`;
       pill.style.height = `${SIZES[m]}px`;
-      pill.style.opacity = m === "link" ? "0.85" : "1";
+      pill.style.opacity = m === "dot" ? "1" : "0.85";
+      plus.style.opacity = m === "dish" ? "1" : "0";
     };
 
     const onMove = (e: PointerEvent) => {
@@ -58,6 +61,7 @@ export default function Cursor() {
         'a, button, [role="button"], input, select, textarea, label'
       );
       if (!t || t.matches("input, select, textarea, label")) setMode("dot");
+      else if (t.matches('[data-cursor="dish"]') || !!t.closest('[data-cursor="dish"]')) setMode("dish");
       else setMode("link");
     };
 
@@ -95,8 +99,21 @@ export default function Cursor() {
       <div className="relative -translate-x-1/2 -translate-y-1/2">
         <div
           data-pill
-          className="h-3 w-3 rounded-full bg-ember transition-[width,height,opacity] duration-300 [transition-timing-function:var(--ease-brasa)]"
-        />
+          className="flex items-center justify-center h-3 w-3 rounded-full bg-ember transition-[width,height,opacity] duration-300 [transition-timing-function:var(--ease-brasa)]"
+        >
+          <svg
+            data-plus
+            aria-hidden="true"
+            viewBox="0 0 16 16"
+            className="h-[14px] w-[14px] shrink-0 opacity-0 transition-opacity duration-200"
+            fill="none"
+            stroke="#0a0a0a"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          >
+            <path d="M8 2v12M2 8h12" />
+          </svg>
+        </div>
       </div>
     </div>
   );
