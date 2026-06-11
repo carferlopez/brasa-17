@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BRASA 17
 
-## Getting Started
+One-page de portfolio para BRASA 17 — restaurante ficticio de Madrid: una sola
+barra de diecisiete sitios frente al fuego, menú degustación único de siete
+pases, sin carta.
 
-First, run the development server:
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 ·
+Framer Motion · Lenis · GSAP + ScrollTrigger (solo el bloque "El fuego").
+
+## Desarrollo
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Assets
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Los medios viven en `public/media/` con estos nombres exactos:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+hero-loop.mp4   fire-vertical.mp4   plating.mp4
+pase-01.jpg … pase-07.jpg
+chef.jpg   espacio-01.jpg   espacio-02.jpg
+```
 
-## Learn More
+Si un asset falta, el layout muestra un placeholder negro con borde naranja y
+el nombre del archivo: la web es evaluable sin assets.
 
-To learn more about Next.js, take a look at the following resources:
+## Tipografía
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+El stack display cae a Helvetica Neue. Si tienes licencia de Neue Haas
+Grotesk, coloca los `.woff2` en `public/fonts/` y descomenta los `@font-face`
+al inicio de [app/globals.css](app/globals.css).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Reservas (Resend)
 
-## Deploy on Vercel
+El formulario envía a `/api/reserva`, que manda un email vía Resend. Copia
+`.env.example` a `.env.local` y define:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `RESEND_API_KEY` — API key de Resend
+- `RESERVA_EMAIL` — destinatario de las reservas
+- `RESERVA_FROM` — remitente opcional (por defecto `onboarding@resend.dev`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sin credenciales, el endpoint valida y responde OK en modo simulado
+(se registra en el log del servidor) para que el flujo sea demostrable.
+
+## Performance y accesibilidad
+
+- Vídeos con `preload="metadata"` (hero) o `preload="none"` + play/pause por
+  IntersectionObserver (resto). `next/image` en todas las imágenes.
+- GSAP se importa dinámicamente y **solo** en desktop sin
+  `prefers-reduced-motion`; en móvil el bloque del fuego usa un fade-in simple
+  sin pin.
+- `prefers-reduced-motion` desactiva preloader, scrub, parallax y lerp.
+
+## Deploy
+
+Pensado para Vercel: `vercel deploy` (añade las env vars en el dashboard).

@@ -1,26 +1,149 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Tipografía display — Neue Haas Grotesk.
+  Si tienes licencia, coloca los archivos en /public/fonts y descomenta:
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @font-face {
+    font-family: "Neue Haas Grotesk Display Pro";
+    src: url("/fonts/NeueHaasDisplay-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
   }
+  @font-face {
+    font-family: "Neue Haas Grotesk Display Pro";
+    src: url("/fonts/NeueHaasDisplay-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  Mientras tanto, el stack cae a Helvetica Neue.
+*/
+
+@theme {
+  --color-ash: #0a0a0a;
+  --color-ember: #ff6b00;
+  --color-bone: #f5f5f0;
+
+  --font-display: "Neue Haas Grotesk Display Pro", "Neue Haas Grotesk Display",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Menlo", "Consolas", monospace;
+
+  --ease-brasa: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis se encarga */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ash);
+  color: var(--color-bone);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Selección de texto en naranja brasa */
+::selection {
+  background: var(--color-ember);
+  color: var(--color-ash);
+}
+
+/* Cursor custom: ocultamos el nativo solo en dispositivos con puntero fino.
+   Los campos de formulario mantienen el cursor del sistema por usabilidad. */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button {
+    cursor: none;
+  }
+  html.has-custom-cursor input,
+  html.has-custom-cursor select,
+  html.has-custom-cursor textarea {
+    cursor: auto;
+  }
+}
+
+/* Grain global — SVG fractalNoise inline, capa fija sobre todo */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Accesibilidad: foco visible en naranja */
+:focus-visible {
+  outline: 1.5px solid var(--color-ember);
+  outline-offset: 3px;
+}
+
+/* Date picker nativo en tema oscuro */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+/* ——— Animaciones del hero/preloader: CSS puro (compositor), sin JS por frame ——— */
+
+/* Cortina del preloader */
+.preloader-curtain {
+  transition: transform 0.9s var(--ease-brasa);
+}
+.preloader-curtain.is-exiting {
+  transform: translateY(-100%);
+}
+
+/* Líneas del logo: ocultas solo mientras dura su animación */
+@keyframes hero-line {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(30%);
+  }
+  to {
+    clip-path: inset(0 0 -10% 0);
+    transform: translateY(0);
+  }
+}
+.hero-intro .hero-line {
+  animation: hero-line 1s var(--ease-brasa) both;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-intro .hero-fade {
+  animation: hero-fade-up 0.8s var(--ease-brasa) both;
+}
+
+/* Indicador de scroll: haz naranja en loop por el compositor */
+@keyframes scroll-beam {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+.hero-intro .scroll-beam {
+  animation: scroll-beam 1.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
