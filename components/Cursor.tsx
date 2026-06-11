@@ -45,9 +45,9 @@ export default function Cursor() {
       pill.style.height = `${SIZES[m]}px`;
 
       if (m === "dish") {
-        // Círculo vacío con borde ember fino + «+» ember
-        pill.style.backgroundColor = "transparent";
-        pill.style.boxShadow = "inset 0 0 0 1px #ff6b00";
+        // Círculo con fondo semitransparente, borde ember y «+» ember
+        pill.style.backgroundColor = "rgba(0,0,0,0.35)";
+        pill.style.boxShadow = "inset 0 0 0 1.5px #ff6b00";
         pill.style.opacity = "1";
         plus.style.opacity = "1";
       } else {
@@ -119,7 +119,7 @@ export default function Cursor() {
             className="h-[14px] w-[14px] shrink-0 opacity-0 transition-opacity duration-200"
             fill="none"
             stroke="#ff6b00"
-            strokeWidth="1.5"
+            strokeWidth="2"
             strokeLinecap="round"
           >
             <path d="M8 2v12M2 8h12" />
