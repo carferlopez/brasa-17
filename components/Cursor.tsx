@@ -90,7 +90,7 @@ export default function Cursor() {
     <div
       ref={rootRef}
       aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[100] hidden opacity-0 transition-opacity duration-300"
+      className="custom-cursor pointer-events-none fixed left-0 top-0 z-[100] hidden opacity-0 transition-opacity duration-300"
     >
       <div className="relative -translate-x-1/2 -translate-y-1/2">
         <div

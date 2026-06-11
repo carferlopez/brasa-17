@@ -17,3 +17,12 @@ export function scrollToAnchor(hash: string) {
     document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
   }
 }
+
+/** Pausa el smooth scroll (p. ej. con un panel modal abierto). */
+export function stopLenis() {
+  instance?.stop();
+}
+
+export function startLenis() {
+  instance?.start();
+}

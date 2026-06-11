@@ -63,6 +63,16 @@ body {
   html.has-custom-cursor textarea {
     cursor: auto;
   }
+  /* Con el panel de detalle abierto, vuelve el cursor del sistema
+     y el punto custom desaparece */
+  html.dish-open,
+  html.dish-open a,
+  html.dish-open button {
+    cursor: auto;
+  }
+  html.dish-open .custom-cursor {
+    opacity: 0 !important;
+  }
 }
 
 /* Grain global — SVG fractalNoise inline, capa fija sobre todo */
